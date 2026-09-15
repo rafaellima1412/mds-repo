@@ -4,17 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "5ba5cb4c8121e86c",
+        "id": "edd2e8f7d0349d1d",
         "type": "tabs",
         "children": [
           {
-            "id": "745c0585ed569a30",
+            "id": "7a84789a0ce3111b",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Nova aba"
+              "type": "split-diff-view",
+              "state": {
+                "aFile": ".obsidian/workspace.json",
+                "bFile": ".obsidian/workspace.json",
+                "aRef": "HEAD",
+                "bRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: workspace.json  (Index)"
             }
           }
         ]
@@ -191,7 +196,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b97b7c97a15c501a",
+  "active": "7a84789a0ce3111b",
   "lastOpenFiles": [
     "entrevistas/Guia_Entrevista_Tecnico.md",
     "entrevistas/Guia_Entrevista_Tecnico_Backend.md",
