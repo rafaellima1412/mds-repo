@@ -1,0 +1,240 @@
+{
+  "main": {
+    "id": "bcf272c7007d0b9f",
+    "type": "split",
+    "children": [
+      {
+        "id": "0e3274eb48eb0c22",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3ad8832f9798b51c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "entrevistas/Guia_Entrevista_Tecnico.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Guia_Entrevista_Tecnico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "b8814b9ed4c3c883",
+    "type": "split",
+    "children": [
+      {
+        "id": "94ecbe1368a2d638",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9805f2781e2c142e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "72d1c4c141136766",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "6db8a8b6aaa313ea",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 556.5
+  },
+  "right": {
+    "id": "34815e71055a1315",
+    "type": "split",
+    "children": [
+      {
+        "id": "846540d5465ff361",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "047ba489dcad1b7f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Rust.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos para Rust"
+            }
+          },
+          {
+            "id": "3f44370a2f90822e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Rust.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída para Rust"
+            }
+          },
+          {
+            "id": "cb404e4b0accf1ef",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "4f132deb9afcda2d",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "293459c5a0c35866",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "entrevistas/Guia_Entrevista_Tecnico.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          },
+          {
+            "id": "b97b7c97a15c501a",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "b97b7c97a15c501a",
+  "lastOpenFiles": [
+    "entrevistas/Guia_Entrevista_Tecnico_Backend.md",
+    "imagens/Pasted image 20260811140156.png",
+    "imagens/Pasted image 20260811143051.png",
+    "imagens",
+    "imagens/Pasted image 20260811142324.png",
+    "imagens/Pasted image 20260811141121.png",
+    "imagens/Pasted image 20260811140801.png",
+    "imagens/Pasted image 20260811140206.png",
+    "entrevistas/Sobre a vaga.md",
+    "Rust.md",
+    "entrevistas/roteiro_entrevista_fullstack_rafael_FINAL.md",
+    "projetos rasp/Projeto_WallE_Cluster_AI.md",
+    "entrevistas",
+    "projetos rasp",
+    "propulsor/Arquitetura.md",
+    "propulsor/arquitetura_sharding_acs.md",
+    "entrevistas/fastapi_estilos_de_organizacao.md",
+    "propulsor",
+    "entrevistas/Guia_Entrevista_Tecnico.md",
+    "propulsor/ftt_operacional_tr069.md",
+    "entrevistas/Guia_Entrevista_DHO2.md",
+    "entrevistas/Guia_Entrevista_DHO.md",
+    "indice.base",
+    "entrevistas/roteiro_entrevista_inova_talentos_perfor_rafael.md",
+    "descrição",
+    "Sem título 1.base",
+    "Sem título.base",
+    "roteiro_entrevista_go_backend_rafael(1).md",
+    "roteiro_entrevista_go_backend_rafael.md",
+    "Sem título.canvas",
+    "Sem título 1",
+    "2026-08-11.md",
+    "Bem-vindo.md",
+    "crie um link.md",
+    "capa.png",
+    "lifes.png",
+    "dono.png",
+    "borrow.png"
+  ]
+}
