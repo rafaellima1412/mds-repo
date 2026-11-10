@@ -4,22 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "edd2e8f7d0349d1d",
+        "id": "29830433525fe7f0",
         "type": "tabs",
         "children": [
           {
-            "id": "7a84789a0ce3111b",
+            "id": "87bb24b47d475eaa",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
-              "state": {
-                "aFile": ".obsidian/workspace.json",
-                "bFile": ".obsidian/workspace.json",
-                "aRef": "HEAD",
-                "bRef": ""
-              },
-              "icon": "diff",
-              "title": "Diff: workspace.json  (Index)"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Nova aba"
             }
           }
         ]
@@ -81,7 +76,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 556.5
+    "width": 368.5
   },
   "right": {
     "id": "34815e71055a1315",
@@ -182,7 +177,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 697.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -196,45 +191,54 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "7a84789a0ce3111b",
+  "active": "87bb24b47d475eaa",
   "lastOpenFiles": [
-    "entrevistas/Guia_Entrevista_Tecnico.md",
-    "entrevistas/Guia_Entrevista_Tecnico_Backend.md",
+    "Apresentação.md",
+    "Elasticsearch.md",
+    "ExternalTaskCache.md",
+    "indice.base",
+    "O que é o Floci.md",
+    "roteiro_entrevista_fullstack_rafael_FINAL.md",
+    "Jenkins Pipeline.md",
+    "entrevistas/System Design.md",
+    "projetos rasp/Projeto_WallE_Cluster_AI.md",
+    "propulsor/ftt_operacional_tr069.md",
+    "propulsor/arquitetura_sharding_acs.md",
+    "propulsor/Arquitetura.md",
+    "entrevistas/Guia_Entrevista_Tecnico_Conceitos.md",
+    "entrevistas/Guia_Entrevista_DHO2.md",
+    "entrevistas/Guia_Entrevista_DHO.md",
+    "entrevistas/Guia de Entrevista — Gerente de Operações.md",
+    "estudos desing system.md",
+    "old/estudos de arquitetura de software.md",
+    "artigos/Lab de Payment Resilience.md",
+    "artigos/aws-vs-opensource-cicd-artigo(1).md",
+    "artigos/artigo-go-vet-linters.md",
+    "artigos/artigo_linkedin_go_vet_e_linters.md",
+    "artigos/analise-autenticacao-autorizacao.md",
+    "artigos/RPC — Remote Procedure Call.md",
+    "artigos/Rust é seguro, mas não é à prova de ciclo.md",
+    "file:C:/Users/CNT/AppData/Local/Temp/a4b5d6f2-b776-45ff-bb78-2dd182a82144_Minetest-WorldEdit-master.zip.144/Minetest-WorldEdit-master/README.md",
+    "old/Guia de Entrevista, Gestor da Área.md",
+    "old/Plano de Estudos Sugerido – Desenvolvedor(a) de Software Sênior Golang _ React.pdf",
+    "outros/Plano de Estudos Sugerido – Desenvolvedor(a) de Software Sênior Golang _ React.pdf",
+    "imagens/camadas_resiliencia_payment.png",
+    "outros",
+    "Nova pasta",
     "imagens/Pasted image 20260811140156.png",
+    "artigos",
     "imagens/Pasted image 20260811143051.png",
     "imagens",
     "imagens/Pasted image 20260811142324.png",
     "imagens/Pasted image 20260811141121.png",
     "imagens/Pasted image 20260811140801.png",
     "imagens/Pasted image 20260811140206.png",
-    "entrevistas/Sobre a vaga.md",
-    "Rust.md",
-    "entrevistas/roteiro_entrevista_fullstack_rafael_FINAL.md",
-    "projetos rasp/Projeto_WallE_Cluster_AI.md",
     "entrevistas",
     "projetos rasp",
-    "propulsor/Arquitetura.md",
-    "propulsor/arquitetura_sharding_acs.md",
-    "entrevistas/fastapi_estilos_de_organizacao.md",
     "propulsor",
-    "propulsor/ftt_operacional_tr069.md",
-    "entrevistas/Guia_Entrevista_DHO2.md",
-    "entrevistas/Guia_Entrevista_DHO.md",
-    "indice.base",
-    "entrevistas/roteiro_entrevista_inova_talentos_perfor_rafael.md",
-    "descrição",
-    "Sem título 1.base",
-    "Sem título.base",
-    "roteiro_entrevista_go_backend_rafael(1).md",
-    "roteiro_entrevista_go_backend_rafael.md",
     "Sem título.canvas",
-    "Sem título 1",
-    "2026-08-11.md",
-    "Bem-vindo.md",
-    "crie um link.md",
     "capa.png",
     "lifes.png",
-    "dono.png",
-    "borrow.png"
+    "dono.png"
   ]
 }

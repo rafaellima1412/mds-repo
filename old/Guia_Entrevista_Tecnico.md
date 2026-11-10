@@ -52,7 +52,7 @@ Revisar:
 ### Conceito
 Um sistema notifica outro quando um evento acontece.
 
-### Experiência Microsoft Graph
+### Experiência Microsoft Graph (Conecta serviços: como Outlook)
 - Subscription para eventos.
 - Endpoint `/webhook/events`.
 - Validação por `validationToken`.
@@ -76,14 +76,16 @@ Não é resolvido simplesmente com regex.
 Defesas:
 - validação
 - sanitização quando HTML é permitido
-- escaping/encoding de saída
-- framework escaping
-- CSP
+- escaping/encoding de saída=- **O dado no banco/API:** `<script>` **O dado na saída (o que o React envia para o HTML do navegador):** `&lt;script&gt;`
+- framework escaping = **HTML Escaping** + **SQL Escaping**
+- CSP ==> Content-Security-Policy: default-src 'self'; script-src 'self' https://meudominio.com
+
 
 ### SQL Injection
 - ORM ajuda.
 - Queries parametrizadas também são seguras.
-- Evitar SQL construído com f-string/input direto.
+- Evitar SQL construído com f-string/input direto.  sim ---># O ":" ou "%s" (depende do banco) indica que ali vai um parâmetro seguro
+  não --> query = f"SELECT * FROM users WHERE username = '{username}'" # Se o username for: admin' OR '1'='1 # A query vira: SELECT * FROM users WHERE username = 'admin' OR '1'='1' (Acessa tudo!)
 
 ### CSRF
 O problema é um navegador autenticado executar ação indevida.
@@ -156,51 +158,6 @@ Voltar para a última versão estável quando o novo deploy apresenta impacto re
 Resposta ideal:
 “Primeiro procuro reduzir o impacto para o usuário. Verifico métricas, logs e alarmes e correlaciono com o último deploy. Se houver forte indício de regressão e uma versão estável disponível, faço rollback. Depois da estabilização, investigo causa raiz e implemento a correção definitiva.”
 
-## 10. Code Review
-Verificar:
-- requisito
-- arquitetura
-- legibilidade
-- boas práticas
-- separação de responsabilidades
-- tratamento de erros
-- segurança
-- testes
-- impactos futuros
-
-Não dizer: “avalio o nível de senioridade da pessoa”.
-Melhor: “avalio se a implementação demonstra domínio adequado da linguagem e das boas práticas.”
-
-## 11. Débito técnico
-“Procuro tornar o débito técnico visível e avaliar o impacto. Se aumenta risco de incidente, dificulta desenvolvimento ou bloqueia evolução, priorizo a correção. Se não puder resolver imediatamente, registro e acompanho.”
-
-Evitar culpar desenvolvedor júnior por problemas. Focar em processo: testes, review, pipeline e aprendizado.
-
-## 12. Estimativas
-1. Entender requisito.
-2. Alinhar prioridade com Produto.
-3. Quebrar em tarefas menores.
-4. Identificar dependências e riscos.
-5. Avaliar capacidade real do time.
-6. Estimar conforme método da equipe.
-7. Explicitar incertezas.
-
-“A estimativa é do time, não apenas minha.”
-
-## 13. Decisão entre duas soluções
-Comparar:
-- complexidade
-- manutenção
-- segurança
-- performance
-- custo operacional
-- prazo
-- arquitetura
-- risco
-- contexto de negócio
-
-Frase forte:
-“Eu não escolho necessariamente a solução mais sofisticada, mas a solução adequada ao contexto e com complexidade proporcional ao problema.”
 
 ## 14. Filas / eventos
 Quando webhook ou integração pode sofrer indisponibilidade:
@@ -236,13 +193,13 @@ Ideia central:
 
 ## 17. Git
 Conhecer:
-- feature branches
+- feature branches=Boas Práticas para Nomear
 - PR
 - code review
-- GitFlow
-- trunk-based development
-- merge/rebase
-- tags/releases
+- GitFlow =é um **modelo de gestão de ramos (branching model)** para o Git
+- trunk-based development =Se precisares de criar uma branch para uma tarefa (`feature/*`), ela deve durar no máximo **um ou dois dias**
+- merge/rebase = usado no trunk-based development o dev deve ficar atualizando constantemente sua brach.
+- tags/releases = tags de versão.
 
 Não confundir estratégia de branches com CI/CD.
 
@@ -257,23 +214,6 @@ Revisar apenas o essencial:
 
 Não tentar decorar termos sem entender o problema que resolvem.
 
-## 19. Perguntas técnicas prováveis
-- Como você estrutura uma API FastAPI?
-- Por que Use Case e Repository separados?
-- Como testa regra de negócio?
-- Como faria integração com serviço externo?
-- Como trata falha de integração?
-- Como faria um webhook resiliente?
-- Como garante autorização?
-- Como evita SQL Injection?
-- Como funciona seu CI/CD?
-- Como faria rollback?
-- Rolling x Canary?
-- Como investiga incidente?
-- Como escolhe entre duas arquiteturas?
-- Como trabalha débito técnico?
-- Como estima uma tarefa?
-- Como orienta outro desenvolvedor?
 
 ## 20. Regra para responder
 Estrutura:

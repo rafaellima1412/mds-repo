@@ -1,4 +1,4 @@
-# Roteiro de Entrevista — Especialista em Desenvolvimento Full Stack (SOL)
+# Roteiro de Entrevista — Especialista em Desenvolvimento Full Stack 
 ### Versão FINAL — Rafael Barbosa de Lima
 
 ---
@@ -43,21 +43,27 @@ Esta é a versão consolidada, construída a partir da simulação completa que 
 
 **6. "Por que Clean Architecture e Arquitetura Hexagonal nesses projetos?"**
 
-> **Resposta-modelo:** "Na FITEC, usei Clean Architecture porque ela separa a regra de negócio do framework e do banco — o domínio não depende de FastAPI nem de PostgreSQL diretamente, só de interfaces. Isso trouxe testabilidade real, dá pra testar a lógica de negócio com mocks. No Riolivre, usei Arquitetura Hexagonal em Go porque o módulo de cálculo de rotas com grafos e DFS precisava ficar desacoplado de como os dados chegavam. Com portas e adapters, defini contratos claros, o que facilita testar isoladamente e trocar implementações sem tocar na lógica central."
+> **Resposta-modelo:** "Na FITEC, usei Clean Architecture porque ela separa a regra de negócio do framework e do banco — o domínio não depende de FastAPI nem de PostgreSQL,mongodb e s3 diretamente, só de interfaces. Isso trouxe testabilidade real, dá pra testar a lógica de negócio com mocks. No Riolivre, usei Arquitetura Hexagonal em Go porque o módulo de cálculo de rotas com grafos e DFS precisava ficar desacoplado de como os dados chegavam. Com portas e adapters, defini contratos claros, o que facilita testar isoladamente e trocar implementações sem tocar na lógica central."
 
 **7. "Fale sobre sua experiência na ITRIAD."**
 
 > **Resposta-modelo:** "Na ITRIAD atuei em múltiplos projetos ao longo de dois anos e meio. Um deles foi um sistema em Go com Gin e React, voltado pra qualidade em chão de fábrica, que enviava notificações quando detectava defeitos em peças. Outro foi em C# com SQL Server, também de qualidade, rodando em PCs e tablets, com um módulo de visão computacional usando YOLO pra reconhecimento de ferramentas — meu papel ali foi o backend de uma versão mobile, integrando com o resultado do modelo. Também tive contato com NestJS/TypeScript em outras frentes do time."
 >
-> *Se perguntarem detalhe técnico de como a notificação de defeito funcionava por trás:* "Essa parte específica não foi o núcleo do que implementei, meu foco foi mais [em X]."
+> *Se perguntarem detalhe técnico de como a notificação de defeito funcionava por trás:* "Era notificação de sistema"
 
-**8. "Você já trabalhou com microsserviços e arquitetura orientada a eventos (EAP)? Me dê um exemplo."**
+**8. "Você já trabalhou com micros serviços e arquitetura orientada a eventos (EAP)? Me dê um exemplo."** (celery - biblioteca de código aberto escrita em Python usada para gerenciar **filas de tarefas assíncronas** e processamento em segundo plano)
 
-> **Resposta-modelo:** "Sim. Na FITEC usei SNS e SQS da AWS pra notificações via e-mail — publicando eventos no SNS que disparavam processamento assíncrono via SQS, com filas mortas (DLQ) configuradas pra tratar falhas sem perder mensagens. Também trabalhei com webhooks via aws pra integrações entre sistemas. Não tenho experiência com brokers mais robustos como Kafka, mas já lidei na prática com os conceitos centrais de EAP: publish/subscribe, filas assíncronas e tratamento de falhas."
+> **Resposta-modelo:** "Sim. Na FITEC trabalhei com processamento assíncrono usando AWS SNS e SQS. Os eventos eram publicados no SNS e processados de forma assíncrona através de filas SQS, com DLQ para tratamento de falhas sem perder mensagens.
+> 
+> Além disso, implementei uma estrutura usando Celery integrado ao SQS como broker. Configurei workers para consumir as mensagens da fila, controle de concorrência e prefetch 
+> (para evitar que o worker pegasse várias mensagens de uma vez). Também utilizei Celery Beat para agendar tarefas periódicas.
+> 
+> Então, além do conceito de publish/subscribe e filas assíncronas, tive contato prático com a implementação do processamento em background, roteamento de tarefas para filas específicas e execução de jobs agendados. Não tenho experiência profunda com Kafka ou RabbitMQ, mas já trabalhei diretamente com os principais conceitos de arquiteturas orientadas a eventos."
 
 **9. "Fale sobre uso de gRPC ou APIs de comunicação além de REST."**
 
 > **Resposta-modelo:** "Na ArchOffice, trabalhei num miniprojeto onde tínhamos dois backends em linguagens diferentes — um em Python e outro em Javascript — que precisavam se comunicar entre si. Usamos gRPC pra essa comunicação, justamente porque funciona bem nesse cenário poliglota, com contratos bem definidos via protobuf. Também usei a biblioteca `requests` no lado Python pra outras integrações via REST."
+> (O **Java** usa a palavra `null` para representar a ausência de um valor ou objeto. Já o **Python** não usa a palavra `null`) ai no protobuf a gente pôs NONE se viesse NULL.
 
 ---
 
@@ -90,7 +96,7 @@ Esta é a versão consolidada, construída a partir da simulação completa que 
 > - Computação: EC2, ECS, Lambda
 > - Banco de dados: RDS, DocumentDB
 > - Armazenamento: S3
-> - Integração/mensageria: API Gateway, SNS, SQS, SES
+> - Integração/mensageria: API Gateway, SNS(notificação), SQS(queue), SES(email)
 > - Autenticação: Cognito
 > - IaC: CloudFormation, CDK
 > - Segurança: IAM
@@ -98,9 +104,13 @@ Esta é a versão consolidada, construída a partir da simulação completa que 
 >
 > 📝 **Atualize seu CV com essa lista** — hoje ele registra só ECS, Lambda, VPC, CDK, bem menos do que você realmente domina.
 
-**15. "Como é sua experiência com bancos relacionais e não relacionais?"**
+**15. "Você já trabalhou com workers ou processamento distribuído?"**
 
-> **Resposta-modelo:** "Tenho bastante experiência com bancos relacionais — PostgreSQL na FITEC e no Riolivre, incluindo modelagem, otimização de queries com EXPLAIN e ajuste de pool de conexões, e também SQL Server na ITRIAD. Do lado não relacional, trabalhei com MongoDB, fazendo consultas e modelagem de documentos, e também DocumentDB na AWS."
+> **Resposta-modelo:** "Sim. Trabalhei com Celery utilizando AWS SQS como broker. Estruturei workers para consumir tarefas de uma fila específica e configurei parâmetros de concorrência e prefetch para controlar o consumo das mensagens.
+> 
+> Também utilizei Celery Beat para agendamento de tarefas periódicas, permitindo que determinadas rotinas fossem executadas automaticamente em horários definidos, sem depender de uma requisição HTTP.
+> 
+> Um exemplo era uma rotina de verificação do status de ordens de serviço, que era executada automaticamente e processava os dados em background."
 
 ---
 
@@ -147,7 +157,6 @@ Esta é a versão consolidada, construída a partir da simulação completa que 
 > **Perguntas sugeridas:**
 > - "Como o time costuma atuar nos projetos — vocês trabalham em squads fixos ou rotativos entre projetos diferentes?"
 > - "Essa vaga é pra dar continuidade a um projeto já em andamento, ou pra começar algo novo?"
-> - "Há espaço pra desenvolver Kubernetes e arquiteturas orientadas a eventos no dia a dia?"
 
 ---
 
@@ -169,4 +178,4 @@ Esta é a versão consolidada, construída a partir da simulação completa que 
 8. Nunca mencionar ID de conta AWS ou outros dados sensíveis de projetos ao descrever pipelines/infra.
 9. Notificação automática de defeitos (ITRIAD, Go/React): não lembra o detalhe técnico — não inventar se perguntado.
 10. Não usar números não documentados (% de melhoria, volume de requisições) a menos que tenha isso de cabeça.
-11. **Atualizar o CV** com: lista completa de serviços AWS, SNS/SQS/DLQ, segundo caso de React (ITRIAD), Arquitetura Hexagonal, n8n.
+11. **Atualizar o CV** com: lista completa de serviços AWS, SNS/SQS/DLQ, segundo caso de React (ITRIAD), Arquitetura Hexagonal.

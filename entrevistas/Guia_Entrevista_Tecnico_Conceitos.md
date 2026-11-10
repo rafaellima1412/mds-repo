@@ -1,6 +1,8 @@
-# GUIA DE ENTREVISTA TÉCNICA — BACKEND / ARQUITETURA / DEVOPS
+# Guia de Entrevista Técnica: Conceitos Universais
 
-> Fase técnica — foco em respostas práticas, objetivas e baseadas em experiência.
+Conceitos independentes de linguagem. Os detalhes e exemplos de código de cada stack estão nos guias de Python, Go e TypeScript.
+
+> Fase técnica, foco em respostas práticas, objetivas e baseadas em experiência.
 >
 > Regra geral: **Contexto → decisão → motivo → resultado/aprendizado.**
 >
@@ -8,11 +10,99 @@
 
 ---
 
-## 1. Como você estrutura uma API FastAPI?
+## Parte 1. Posicionamento e regras de resposta
+
+### Perfil e posicionamento
+
+- Backend com foco em APIs REST, integrações, automações e PostgreSQL.
+
+- Experiência prática com Clean Architecture, Use Cases, Repositories, DI, testes, Docker e AWS.
+- Atuação como referência técnica: revisão de PRs, mentoria, decomposição de tarefas, estimativas, riscos, incidentes e decisões arquiteturais.
+- Liderança técnica sem depender de autoridade formal.
+
+### REGRA DE OURO DA ENTREVISTA
+
+Não tente parecer um livro.
+
+Você já trabalha com os conceitos. A resposta mais forte é mostrar **como você pensa e toma decisões**.
+
+Quando possível:
+
+```text
+PROBLEMA
+   ↓
+CONTEXTO
+   ↓
+DECISÃO
+   ↓
+POR QUE?
+   ↓
+RESULTADO
+   ↓
+APRENDIZADO
+```
+
+A entrevista técnica não precisa provar que você sabe todos os termos.
+
+Ela precisa mostrar que você consegue **resolver problemas de engenharia com critério**.
+
+### Regra de ouro (versão com experiência real)
+
+Responder:
+
+```text
+Experiência real
+      ↓
+Conceito
+      ↓
+Decisão
+      ↓
+Motivo
+      ↓
+Resultado
+```
+
+Evitar respostas excessivamente teóricas.
+
+Priorizar exemplos reais.
+
+### RESPOSTA CORINGA
+
+Quando a pergunta for aberta e você precisar organizar o raciocínio:
+
+> “Eu começaria entendendo o requisito e as restrições do problema. Depois avaliaria as alternativas considerando complexidade, manutenção, segurança, performance, custo e risco. A partir disso escolheria a solução mais simples que atende ao contexto, implementaria com testes e observabilidade e acompanharia o comportamento em produção.”
+
+### O que fazer quando não lembrar
+
+Não inventar.
+
+Frases úteis:
+
+> "Não lembro exatamente qual implementação usamos naquela época, mas lembro do conceito."
+
+> "Não tive experiência prática profunda nessa ferramenta, mas conheço o conceito e consigo explicar como eu abordaria."
+
+> "Essa parte específica eu precisaria revisar, mas o princípio que eu seguiria seria..."
+
+> "Não quero afirmar algo que não tenho certeza."
+
+Isso passa mais segurança do que tentar adivinhar.
+
+### Frase final para lembrar
+
+> "Eu procuro escolher a solução adequada ao contexto, com complexidade proporcional ao problema. Não necessariamente a solução mais sofisticada."
+
+Essa ideia resume bem a postura esperada de alguém com experiência em arquitetura.
+
+---
+
+## Parte 2. Perguntas técnicas prováveis
+
+### Como você estrutura uma API?
 
 Eu procuro separar as responsabilidades. Os **routers** ficam responsáveis pela camada HTTP, validação inicial e entrada da requisição. Eles chamam os **Use Cases**, que concentram o fluxo e as regras de negócio. Os **Repositories** abstraem a persistência.
 
-Uso Pydantic para DTOs, SQLAlchemy para persistência, Alembic para migrations e Dependency Injection para fornecer as dependências.
+As dependências são fornecidas por Dependency Injection. (Stack Python: ver Guia Python.)
 
 A ideia é evitar que o router conheça detalhes de banco ou infraestrutura.
 
@@ -22,7 +112,7 @@ A ideia é evitar que o router conheça detalhes de banco ou infraestrutura.
 
 ---
 
-## 2. Por que Use Case e Repository separados?
+### Por que Use Case e Repository separados?
 
 Porque são responsabilidades diferentes.
 
@@ -54,13 +144,11 @@ Isso melhora:
 
 ---
 
-## 3. Como testa regra de negócio?
+### Como testa regra de negócio?
 
 Eu prefiro testar a regra de negócio isoladamente, sem depender do banco ou de serviços externos.
 
 Para isso, o Use Case recebe suas dependências por injeção e, nos testes, posso utilizar **mocks ou fakes** dos repositories e serviços externos.
-
-Com Python, utilizo **pytest** e, quando necessário, TestClient para testar a camada HTTP.
 
 Exemplo:
 
@@ -76,7 +164,7 @@ Assim consigo verificar cenários de sucesso, validações e falhas sem precisar
 
 ---
 
-## 4. Como faria integração com serviço externo?
+### Como faria integração com serviço externo?
 
 Primeiro eu isolaria a integração em um componente próprio, evitando espalhar chamadas HTTP pela aplicação.
 
@@ -100,21 +188,21 @@ Eu trataria:
 - erros HTTP;
 - retry quando fizer sentido;
 - logs;
-- idempotência quando a operação permitir;
+- idempotência quando a operação permitir; Outbox_Pattern salvar o usuário e o evento na mesma transação:
 - processamento assíncrono quando a integração não precisar ser síncrona.
 
 Se a indisponibilidade do serviço externo não puder bloquear a requisição, colocaria a operação em uma fila.
 
 ---
 
-## 5. Como trata falha de integração?
+### Como trata falha de integração?
 
 Primeiro diferencio falhas transitórias de falhas permanentes.
 
 Para falhas transitórias, posso utilizar:
 
-- timeout;
-- retry com backoff;
+- timeout; 
+- retry com backoff; após 1 segundo, depois após 2 segundos
 - limite de tentativas;
 - circuit breaker;
 - fila para processamento assíncrono.
@@ -145,7 +233,7 @@ A decisão depende da criticidade e do comportamento esperado da integração.
 
 ---
 
-## 6. Como faria um webhook resiliente?
+### Como faria um webhook resiliente?
 
 Eu evitaria fazer todo o processamento dentro da requisição HTTP.
 
@@ -171,7 +259,30 @@ Também cuidaria de:
 
 - autenticação/assinatura;
 - validação do payload;
-- idempotência;
+- IDEMPOTÊNCIA
+
+Se perguntarem sobre webhooks ou filas:
+
+Uma mesma mensagem pode chegar mais de uma vez. Por isso, o processamento precisa ser idempotente quando o domínio permitir.
+
+Uma abordagem é utilizar um identificador único do evento e registrar o processamento de forma que uma segunda tentativa não produza o mesmo efeito novamente.
+
+```text
+Evento 123
+   ↓
+Processa
+   ↓
+Marca evento 123 como processado
+
+Evento 123 novamente
+   ↓
+Detecta que já foi processado
+   ↓
+Não duplica operação
+```
+
+---
+
 - retry;
 - DLQ;
 - logs e métricas.
@@ -182,7 +293,7 @@ Também cuidaria de:
 
 ---
 
-## 7. Como garante autorização?
+### Como garante autorização?
 
 Primeiro separo **authentication** de **authorization**.
 
@@ -206,17 +317,13 @@ Também considero:
 
 ---
 
-## 8. Como evita SQL Injection?
+### Como evita SQL Injection?
 
 Evito construir SQL concatenando diretamente dados fornecidos pelo usuário.
 
-Por exemplo, não faria:
+Por exemplo, não montaria a query concatenando o valor recebido do usuário dentro do texto SQL (exemplo em código no Guia Python).
 
-```python
-query = f"SELECT * FROM users WHERE name = '{name}'"
-```
-
-Prefiro ORM, como SQLAlchemy, ou queries parametrizadas.
+Prefiro ORM ou queries parametrizadas (prepared statements).
 
 ```text
 Entrada do usuário
@@ -232,7 +339,7 @@ O ORM ajuda, mas o ponto fundamental é **não misturar input do usuário direta
 
 ---
 
-## 9. Como funciona seu CI/CD?
+### Como funciona seu CI/CD?
 
 Um fluxo que utilizo pode ser:
 
@@ -272,14 +379,14 @@ O pre-commit ajuda na validação local, mas as validações importantes também
 
 ---
 
-## 10. Como faria rollback?
+### Como faria rollback?
 
 Primeiro preciso ter uma versão estável conhecida.
 
 Se o novo deploy apresentar uma regressão relevante, posso interromper a progressão e voltar para a versão anterior.
 
 ```text
-V1 — estável
+V1, estável
  ↓
 Deploy V2
  ↓
@@ -296,9 +403,9 @@ Também procuro correlacionar o problema com o deploy, métricas e logs antes de
 
 ---
 
-## 11. Rolling x Canary?
+### Rolling x Canary?
 
-### Rolling
+#### Rolling
 
 A nova versão substitui gradualmente as instâncias antigas.
 
@@ -314,7 +421,7 @@ V2 V2 V2
 
 A mudança acontece progressivamente.
 
-### Canary
+#### Canary
 
 A nova versão recebe inicialmente uma pequena porcentagem do tráfego.
 
@@ -345,7 +452,7 @@ Se as métricas indicarem problema, interrompo a progressão e faço rollback.
 
 ---
 
-## 12. Como investiga incidente em produção?
+### Como investiga incidente em produção?
 
 Minha primeira preocupação é **reduzir o impacto para o usuário**.
 
@@ -369,7 +476,7 @@ Depois que o sistema estiver estabilizado, parto para a investigação da causa 
 
 ---
 
-## 13. Como escolhe entre duas arquiteturas?
+### Como escolhe entre duas arquiteturas?
 
 Não escolho automaticamente a arquitetura mais sofisticada.
 
@@ -395,7 +502,7 @@ Exemplo: nem todo problema precisa de microsserviços. Às vezes um monólito be
 
 ---
 
-## 14. Como trabalha débito técnico?
+### Como trabalha débito técnico?
 
 Primeiro procuro tornar o débito técnico **visível**.
 
@@ -417,7 +524,7 @@ Se não for possível resolver imediatamente, registro, acompanho e procuro enca
 
 ---
 
-## 15. Como estima uma tarefa?
+### Como estima uma tarefa?
 
 Eu não gosto de estimar apenas olhando o título da tarefa.
 
@@ -440,7 +547,7 @@ Se houver muita incerteza, eu sinalizo isso em vez de inventar uma precisão que
 
 ---
 
-## 16. Como orienta outro desenvolvedor?
+### Como orienta outro desenvolvedor?
 
 Eu começo entendendo o problema e o nível de contexto que a pessoa já possui.
 
@@ -473,9 +580,425 @@ Evito transformar review em julgamento pessoal.
 
 > “Meu objetivo ao orientar alguém é aumentar a autonomia da pessoa, não criar dependência de mim.”
 
+> **Nota sobre prepared statements:** Outra vantagem dos _Prepared Statements_ é que, se utilizados corretamente, ajudam a evitar ataques de Injeção de SQL. **Note que para isso** é preciso que os parâmetros da consulta sejam atribuídos através dos métodos `setInt()`, `setString()`, etc. presentes na interface `PreparedStatement` e não por concatenação de strings.
+
+### MAPA RÁPIDO PARA REVISÃO
+
+| Pergunta | Palavra-chave |
+|---|---|
+| Estrutura de API | Router/Controller → Use Case → Repository |
+| Use Case x Repository | Separação de responsabilidades |
+| Testes | mocks/fakes |
+| Serviço externo | Timeout + retry + isolamento |
+| Falha de integração | Retry + circuit breaker + fila |
+| Webhook | Validar → Queue → 2xx → Worker |
+| Autorização | Permissão além do token |
+| SQL Injection | ORM / queries parametrizadas |
+| CI/CD | Test → Build → ECR → Deploy → Monitor |
+| Rollback | Voltar para versão estável |
+| Rolling | Substituição gradual |
+| Canary | Pequena porcentagem de tráfego |
+| Incidente | Mitigar → observar → rollback → RCA |
+| Arquitetura | Contexto + risco + complexidade |
+| Débito técnico | Tornar custo/risco visível |
+| Estimativa | Quebrar + dependências + riscos |
+| Mentoria | Aumentar autonomia |
+
 ---
 
-# BLOCO EXTRA — SRE / OBSERVABILIDADE
+## Parte 3. Arquitetura
+
+### Clean Architecture
+
+##### Explicação curta
+
+> A ideia é proteger a regra de negócio. O centro tem as entidades e os casos de uso, que não conhecem framework web, ORM nem banco. Em volta ficam os adaptadores, como controllers e implementações de repositório. A dependência sempre aponta para dentro.
+
+##### Exemplo mental
+
+```text
+Controller
+    ↓
+Use Case
+    ↓
+Repository Interface
+    ↓
+Repository Implementation
+    ↓
+ORM / Banco
+```
+
+O Use Case não precisa saber qual ORM ou banco está por trás (exemplos de ORMs por linguagem nos guias específicos).
+
+##### Ligação com testes
+
+No teste:
+
+```text
+CriarUsuario
+     ↓
+Mock UserRepository
+```
+
+Assim é possível testar a regra de negócio sem banco, ORM ou HTTP.
+
+##### Frase para entrevista
+
+> A Clean Architecture facilita os testes porque consigo testar o caso de uso isoladamente, substituindo infraestrutura como banco e ORM por mocks.
+
+##### Trade-off
+
+> Gera mais arquivos e abstrações. Para um CRUD simples pode ser exagero; vale quando a regra de negócio é relevante.
+
+### SOLID
+#### SRP
+Uma responsabilidade bem definida.
+
+#### Dependency Inversion
+O Use Case depende de uma abstração, não de PostgreSQL diretamente.
+
+Exemplo:
+CreateUser → UserRepository (interface) → PostgresUserRepository
+
+#### Por que isso importa?
+- Testabilidade
+- Baixo acoplamento
+- Manutenção
+- Troca de infraestrutura
+- Clareza de responsabilidades
+
+### DDD
+
+Revisar apenas o essencial:
+
+- domínio;
+- entidades;
+- value objects;
+- agregados;
+- serviços de domínio;
+- bounded contexts.
+
+Não decorar termos por decorar.
+
+A pergunta importante é:
+
+> “Qual problema esse conceito resolve?”
+
+---
+
+## Parte 4. Testes
+
+### Pirâmide de testes
+
+A ideia utilizada nos meus projetos:
+
+```text
+             E2E
+          /       \
+       Integração
+      /             \
+    Unitários, muitos
+```
+
+- Muitos testes unitários
+- Menos testes de integração
+- Poucos testes E2E
+
+Definições rápidas:
+
+- **Testes unitários**: Validam o menor pedaço de código isolado, como uma função ou método específico.
+- **Testes de integração**: Verificam se diferentes módulos ou sistemas conversam bem entre si.
+- **Testes ponta a ponta (E2E)**: Simulam a ação real de um usuário navegando por toda a aplicação
+
+### TDD: ciclo
+
+```text
+RED
+ ↓
+Escrever teste que falha
+ ↓
+GREEN
+ ↓
+Implementar o mínimo
+ ↓
+REFACTOR
+ ↓
+Melhorar o código
+```
+
+### Ligação com Clean Architecture
+
+Casos de uso isolados são mais fáceis de testar:
+
+```text
+Use Case
+   ↓
+Interface Repository
+   ↓
+Mock
+```
+
+O teste não precisa subir banco nem depender do ORM.
+
+---
+
+## Parte 5. APIs, banco de dados e webhooks
+
+### APIs REST: o que revisar
+Revisar:
+- HTTP methods
+- Status codes
+- autenticação/autorização
+- validação
+- paginação
+- tratamento de erros
+- versionamento quando necessário
+- idempotência em operações apropriadas
+
+### Status codes
+
+- `200` OK
+- `201` Created
+- `204` No Content
+- `400` Bad Request
+- `401` Unauthorized
+- `403` Forbidden
+- `404` Not Found
+- `409` Conflict
+- `422` Unprocessable Entity
+- `500` Internal Server Error
+
+### Webhooks
+#### Conceito
+Um sistema notifica outro quando um evento acontece.
+
+#### Experiência Microsoft Graph (Conecta serviços: como Outlook)
+- Subscription para eventos.
+- Endpoint `/webhook/events`.
+- Validação por `validationToken`.
+- Processamento do payload.
+- Tratamento de eventos `deleted`.
+- Renovação periódica porque subscriptions expiram.
+
+#### Boa resposta
+“Webhook é um mecanismo orientado a eventos. Eu recebo a notificação, valido a requisição, processo ou publico para processamento assíncrono e respondo rapidamente. Como subscriptions podem expirar, também é necessário cuidar da renovação.”
+
+### Banco de dados
+
+#### Pontos para revisar
+
+- Índices
+- Transações
+- Constraints
+- Foreign Keys
+- N+1
+- Paginação
+- SQL Injection
+- Connection Pool
+- Queries complexas
+- Performance
+
+##### ORM x SQL nativo
+
+> Uso ORM para operações comuns e produtividade. Quando tenho uma consulta muito específica, complexa ou que exige maior controle de performance, posso utilizar SQL nativo.
+
+---
+
+## Parte 6. Resiliência, filas e idempotência
+
+Implementação completa em código (retry, backoff, jitter, circuit breaker, worker pool) no Guia Go.
+
+### Resiliência
+
+Conceitos para lembrar:
+
+```text
+Timeout
+   ↓
+Retry
+   ↓
+Backoff
+   ↓
+Jitter
+   ↓
+Circuit Breaker
+   ↓
+Idempotência
+```
+
+##### Retry
+
+Nem todo erro merece retry.
+
+Erro permanente:
+
+```text
+400 / validação
+→ não repetir
+```
+
+Erro transitório:
+
+```text
+timeout / 503
+→ pode repetir
+```
+
+##### Idempotência
+
+A mesma mensagem pode chegar mais de uma vez.
+
+> Uso um identificador único do evento e uma garantia de processamento único, normalmente apoiada por constraint ou controle transacional.
+
+Não aprofundar em Outbox a menos que o entrevistador peça.
+
+### Filas e eventos
+
+Quando uma integração externa pode sofrer indisponibilidade:
+
+```text
+Webhook
+   ↓
+Validação
+   ↓
+Fila
+   ↓
+2xx
+   ↓
+Worker
+   ↓
+Processamento
+```
+
+Benefícios:
+
+- Desacoplamento
+- Processamento assíncrono
+- Retry
+- Resiliência
+- DLQ
+
+##### DLQ
+
+Mensagens que continuam falhando depois das tentativas podem ser direcionadas para uma Dead Letter Queue para investigação.
+
+---
+
+## Parte 7. Docker, Git, CI/CD, AWS e escalabilidade
+
+### Docker
+
+##### Resposta curta
+
+> Uso Docker para padronizar o ambiente e garantir que aplicação e dependências tenham comportamento consistente entre desenvolvimento, CI e produção.
+
+##### Conceitos
+
+- Dockerfile
+- Image
+- Container
+- Volume
+- Network
+- Docker Compose
+- Multi-stage build
+
+- **Docker no dia a dia:** mesma imagem em todos os ambientes; docker-compose para subir API e banco localmente; multi-stage build para imagem menor.
+
+### Git
+
+Conhecer:
+- feature branches=Boas Práticas para Nomear
+- PR
+- code review
+- GitFlow =é um **modelo de gestão de ramos (branching model)** para o Git
+- trunk-based development =Se precisares de criar uma branch para uma tarefa (`feature/*`), ela deve durar no máximo **um ou dois dias**
+- merge/rebase = usado no trunk-based development o dev deve ficar atualizando constantemente sua brach.
+- tags/releases = tags de versão.
+
+Não confundir estratégia de branches com CI/CD.
+
+#### GitFlow
+
+```text
+feature
+   ↓
+develop
+   ↓
+release
+   ↓
+main/master
+```
+
+Hotfix sai para correções urgentes.
+
+**Importante:** GitFlow é estratégia de branches. Não é CI/CD.
+
+#### Code Review
+
+> Para mim, code review não é apenas procurar erro de sintaxe. É uma oportunidade de verificar regra de negócio, arquitetura, segurança, testes, legibilidade e manutenção futura.
+
+### CI/CD e deploy
+
+O fluxo completo, rollback e rolling x canary estão na Parte 2.
+
+**Importante:**
+Pre-commit é uma validação local. CI deve repetir as validações no servidor.
+
+### AWS
+
+Usar principalmente a experiência da FITEC. Não transformar a resposta em lista de serviços. Explicar o problema que cada serviço resolveu.
+
+**Serviços com experiência:**
+Experiência com:
+- CodePipeline
+- CodeBuild
+- ECR
+- ECS
+- S3
+- CloudFront
+- API Gateway
+- Lambda
+- RDS PostgreSQL
+- CloudFormation
+- SSM
+- Secrets Manager
+- CloudWatch
+
+**Outros serviços que posso mencionar como conceito:** SQS, SNS, Parameter Store.
+
+### Escalabilidade e disponibilidade
+
+Conceitos:
+
+- API stateless
+- Escalabilidade horizontal
+- Cache
+- Índices
+- Filas
+- Processamento assíncrono
+- Observabilidade
+
+##### Exemplo
+
+Envio de e-mail pode ser assíncrono:
+
+```text
+API
+ ↓
+Queue
+ ↓
+Worker
+ ↓
+E-mail
+```
+
+Assim uma indisponibilidade do serviço externo não precisa bloquear a requisição principal.
+
+---
+
+## Parte 8. Observabilidade e SRE
+
+### SRE
 
 Se perguntarem **“O que você entende por SRE?”**:
 
@@ -499,130 +1022,13 @@ Eu penso principalmente em:
 
 > “Não basta o sistema funcionar; precisamos conseguir perceber quando ele está degradando.”
 
----
-
-# BLOCO EXTRA — IDEMPOTÊNCIA
-
-Se perguntarem sobre webhooks ou filas:
-
-Uma mesma mensagem pode chegar mais de uma vez. Por isso, o processamento precisa ser idempotente quando o domínio permitir.
-
-Uma abordagem é utilizar um identificador único do evento e registrar o processamento de forma que uma segunda tentativa não produza o mesmo efeito novamente.
-
-```text
-Evento 123
-   ↓
-Processa
-   ↓
-Marca evento 123 como processado
-
-Evento 123 novamente
-   ↓
-Detecta que já foi processado
-   ↓
-Não duplica operação
-```
+O roteiro de investigação de incidente está na Parte 2.
 
 ---
 
-# BLOCO EXTRA — GIT
+## Parte 9. Segurança
 
-Conhecer a diferença entre estratégia de branches e CI/CD.
-
-Conceitos importantes:
-
-- feature branches;
-- Pull Request;
-- Code Review;
-- GitFlow;
-- trunk-based development;
-- merge;
-- rebase;
-- tags;
-- releases.
-
-**Importante:** Git/branching é uma parte do processo de desenvolvimento. CI/CD é o processo automatizado de validação e entrega.
-
----
-
-# BLOCO EXTRA — DDD
-
-Revisar apenas o essencial:
-
-- domínio;
-- entidades;
-- value objects;
-- agregados;
-- serviços de domínio;
-- bounded contexts.
-
-Não decorar termos por decorar.
-
-A pergunta importante é:
-
-> “Qual problema esse conceito resolve?”
-
----
-
-# RESPOSTA CORINGA
-
-Quando a pergunta for aberta e você precisar organizar o raciocínio:
-
-> “Eu começaria entendendo o requisito e as restrições do problema. Depois avaliaria as alternativas considerando complexidade, manutenção, segurança, performance, custo e risco. A partir disso escolheria a solução mais simples que atende ao contexto, implementaria com testes e observabilidade e acompanharia o comportamento em produção.”
-
----
-
-# MAPA RÁPIDO PARA REVISÃO
-
-| Pergunta | Palavra-chave |
-|---|---|
-| FastAPI | Router → Use Case → Repository |
-| Use Case x Repository | Separação de responsabilidades |
-| Testes | pytest + mocks/fakes |
-| Serviço externo | Timeout + retry + isolamento |
-| Falha de integração | Retry + circuit breaker + fila |
-| Webhook | Validar → Queue → 2xx → Worker |
-| Autorização | Permissão além do token |
-| SQL Injection | ORM / queries parametrizadas |
-| CI/CD | Test → Build → ECR → Deploy → Monitor |
-| Rollback | Voltar para versão estável |
-| Rolling | Substituição gradual |
-| Canary | Pequena porcentagem de tráfego |
-| Incidente | Mitigar → observar → rollback → RCA |
-| Arquitetura | Contexto + risco + complexidade |
-| Débito técnico | Tornar custo/risco visível |
-| Estimativa | Quebrar + dependências + riscos |
-| Mentoria | Aumentar autonomia |
-
----
-
-# REGRA DE OURO DA ENTREVISTA
-
-Não tente parecer um livro.
-
-Você já trabalha com os conceitos. A resposta mais forte é mostrar **como você pensa e toma decisões**.
-
-Quando possível:
-
-```text
-PROBLEMA
-   ↓
-CONTEXTO
-   ↓
-DECISÃO
-   ↓
-POR QUE?
-   ↓
-RESULTADO
-   ↓
-APRENDIZADO
-```
-
-A entrevista técnica não precisa provar que você sabe todos os termos.
-
-Ela precisa mostrar que você consegue **resolver problemas de engenharia com critério**.
-
-# BLOCO EXTRA — OWASP / SEGURANÇA
+### OWASP
 
 Se perguntarem **“Quais conceitos de OWASP você conhece?”**:
 
@@ -653,19 +1059,15 @@ Para uma API backend, eu presto atenção principalmente em:
 
 ---
 
-## SQL Injection
+#### SQL Injection
 
 O problema acontece quando dados fornecidos pelo usuário acabam sendo interpretados como parte do SQL.
 
 Eu evito construir SQL concatenando entrada do usuário.
 
-Não faria:
+Não montaria a query concatenando o valor recebido do usuário dentro do texto SQL (exemplo em código no Guia Python).
 
-```python
-query = f"SELECT * FROM users WHERE name = '{name}'"
-```
-
-Prefiro utilizar ORM, como SQLAlchemy, ou queries parametrizadas.
+Prefiro utilizar ORM ou queries parametrizadas.
 
 ```text
 Entrada do usuário
@@ -685,7 +1087,7 @@ A ideia principal é separar **dados** de **comandos SQL**.
 
 ---
 
-## XSS — Cross-Site Scripting
+#### XSS: Cross-Site Scripting
 
 XSS acontece quando uma aplicação permite que conteúdo fornecido pelo usuário seja interpretado como código no navegador.
 
@@ -731,7 +1133,7 @@ Para evitar isso, considero principalmente:
 
 ---
 
-## Broken Access Control
+#### Broken Access Control
 
 Uma aplicação pode autenticar corretamente o usuário e ainda assim permitir que ele acesse algo que não deveria.
 
@@ -770,7 +1172,7 @@ Por exemplo, não basta o usuário estar autenticado. Se ele tentar acessar o pe
 
 ---
 
-## Authentication x Authorization
+#### Authentication x Authorization
 
 Eu gosto de separar os dois conceitos.
 
@@ -782,7 +1184,7 @@ Pode envolver:
 
 - usuário e senha;
     
-- OAuth 2.0;
+- OAuth 2.0; >> entrar com google 
     
 - OpenID Connect;
     
@@ -812,7 +1214,7 @@ Um token válido não significa automaticamente que o usuário pode executar qua
 
 ---
 
-## CSRF
+#### CSRF ( Ele impede o envio do cookie em requisições cross-site (de outros sites)
 
 CSRF acontece quando um usuário autenticado é induzido a realizar uma operação que não pretendia realizar.
 
@@ -835,7 +1237,7 @@ Também preciso entender como o mecanismo de autenticação utilizado pela aplic
 
 ---
 
-## SSRF
+#### SSRF
 
 SSRF acontece quando a aplicação permite que um usuário controle, direta ou indiretamente, uma requisição feita pelo servidor.
 
@@ -870,7 +1272,7 @@ Para reduzir o risco, considero:
 
 ---
 
-## Cryptographic Failures
+#### Cryptographic Failures
 
 Aqui penso principalmente em proteção de dados sensíveis.
 
@@ -893,7 +1295,7 @@ Na AWS, por exemplo, posso utilizar serviços como Secrets Manager ou Parameter 
 
 ---
 
-## Security Misconfiguration
+#### Security Misconfiguration
 
 Mesmo que o código esteja correto, uma configuração insegura pode abrir uma vulnerabilidade.
 
@@ -918,7 +1320,7 @@ Eu procuro aplicar configurações diferentes para desenvolvimento e produção 
 
 ---
 
-## Vulnerable and Outdated Components
+#### Vulnerable and Outdated Components
 
 Também preciso considerar as dependências utilizadas pela aplicação.
 
@@ -941,7 +1343,7 @@ No CI/CD, essas verificações podem fazer parte do pipeline.
 
 ---
 
-## Security Logging and Monitoring
+#### Security Logging and Monitoring
 
 Segurança também depende de conseguir perceber comportamentos suspeitos.
 
@@ -979,7 +1381,7 @@ A ideia é conseguir investigar um incidente sem transformar o próprio log em u
 
 ---
 
-## Input Validation
+#### Input Validation
 
 Eu não considero a validação de entrada apenas uma preocupação do frontend.
 
@@ -999,17 +1401,17 @@ Regra de negócio
 Persistência
 ```
 
-No FastAPI, Pydantic ajuda bastante na validação estrutural dos dados recebidos.
+Bibliotecas de validação ajudam na validação estrutural dos dados recebidos (exemplo Python: Pydantic, ver Guia Python).
 
 Mas validação de formato não substitui autorização ou regra de negócio.
 
 ---
 
-## Secrets
+#### Secrets
 
 Não colocaria:
 
-```python
+```text
 DATABASE_PASSWORD = "senha-super-secreta"
 ```
 
@@ -1038,7 +1440,7 @@ Também evito expor secrets em:
 
 ---
 
-## Princípio do menor privilégio
+#### Princípio do menor privilégio
 
 Sempre que possível, cada usuário, serviço ou componente deve possuir apenas as permissões necessárias para executar sua função.
 
@@ -1060,7 +1462,7 @@ Evito dar acesso administrativo completo simplesmente porque é mais fácil.
 
 ---
 
-# Como eu penso em segurança
+### Como eu penso em segurança
 
 Eu não vejo segurança como uma etapa que acontece apenas no final do desenvolvimento.
 
@@ -1109,33 +1511,68 @@ Por exemplo, ao criar uma API eu já penso em:
 
 ---
 
-# Resposta curta se perguntarem sobre OWASP
+### Resposta curta se perguntarem sobre OWASP
 
 > “Eu conheço os principais riscos do OWASP e tento aplicar isso no dia a dia. Penso bastante em controle de acesso, autenticação, SQL Injection, XSS, validação de entrada, secrets, configuração segura e dependências vulneráveis. Não vejo OWASP como uma lista para decorar; uso como referência para pensar nos riscos da aplicação.”
 
 ---
 
-# MAPA RÁPIDO — OWASP
+### MAPA RÁPIDO: OWASP (ô-uasp)
 
-|Conceito|Palavra-chave|
-|---|---|
-|SQL Injection|Query parametrizada / ORM|
-|XSS|Output encoding / sanitização|
-|Broken Access Control|Permissão / ownership|
-|Authentication|Identidade|
-|Authorization|Permissão|
-|CSRF|Cookie / CSRF token|
-|SSRF|Requisição feita pelo servidor|
-|Cryptographic Failures|Proteção de dados|
-|Security Misconfiguration|Configuração segura|
-|Vulnerable Components|Dependências|
-|Security Logging|Auditoria / monitoramento|
-|Input Validation|Validar entrada|
-|Secrets|Não colocar credenciais no código|
-|Least Privilege|Menor permissão necessária|
-# INTELIGÊNCIA ARTIFICIAL — CONCEITOS PARA ENTREVISTA
+| Conceito                  | Palavra-chave                     |
+| ------------------------- | --------------------------------- |
+| SQL Injection             | Query parametrizada / ORM         |
+| XSS                       | Output encoding / sanitização     |
+| Broken Access Control     | Permissão / ownership             |
+| Authentication            | Identidade                        |
+| Authorization             | Permissão                         |
+| CSRF                      | Cookie / CSRF token               |
+| SSRF                      | Requisição feita pelo servidor    |
+| Cryptographic Failures    | Proteção de dados                 |
+| Security Misconfiguration | Configuração segura               |
+| Vulnerable Components     | Dependências                      |
+| Security Logging          | Auditoria / monitoramento         |
+| Input Validation          | Validar entrada                   |
+| Secrets                   | Não colocar credenciais no código |
+| Least Privilege           | Menor permissão necessária        |
 
-## 1. Inteligência Artificial
+### Notas complementares (XSS, SQL Injection, CSRF, LGPD)
+
+#### XSS
+Não é resolvido simplesmente com regex.
+Defesas:
+- validação
+- sanitização quando HTML é permitido
+- escaping/encoding de saída=- **O dado no banco/API:** `<script>` **O dado na saída (o que o React envia para o HTML do navegador):** `&lt;script&gt;`
+- framework escaping = **HTML Escaping** + **SQL Escaping**
+- CSP ==> Content-Security-Policy: default-src 'self'; script-src 'self' https://meudominio.com
+
+#### CSRF
+O problema é um navegador autenticado executar ação indevida.
+Defesas:
+- CSRF token
+- SameSite cookies
+- configuração adequada de cookies
+- expiração reduz janela de exposição, mas não substitui proteção CSRF.
+
+#### LGPD
+Revisar:
+- minimização de dados
+- finalidade
+- acesso restrito
+- proteção de dados pessoais
+- retenção
+- auditoria quando aplicável.
+
+Caso real de análise de autenticação e autorização: ver Guia Python.
+
+---
+
+## Parte 10. Inteligência Artificial
+
+### INTELIGÊNCIA ARTIFICIAL: CONCEITOS PARA ENTREVISTA
+
+#### Inteligência Artificial
 
 IA é um campo amplo que busca criar sistemas capazes de executar tarefas que normalmente exigiriam algum tipo de inteligência humana, como reconhecer padrões, interpretar linguagem, tomar decisões ou gerar conteúdo.
 
@@ -1143,22 +1580,22 @@ Para desenvolvimento de sistemas, o mais importante é entender como integrar IA
 
 ---
 
-## 2. Machine Learning
+#### Machine Learning
 
 Machine Learning é uma área da IA em que os sistemas aprendem padrões a partir de dados.
 
 Principais tipos:
 
-- **Supervisionado** — aprende usando exemplos com respostas conhecidas.
+- **Supervisionado**, aprende usando exemplos com respostas conhecidas.
     
-- **Não supervisionado** — procura padrões ou agrupamentos nos próprios dados.
+- **Não supervisionado**, procura padrões ou agrupamentos nos próprios dados.
     
-- **Reforço** — aprende por tentativa, erro e recompensas.
+- **Reforço**, aprende por tentativa, erro e recompensas.
     
 
 ---
 
-## 3. Deep Learning
+#### Deep Learning
 
 Deep Learning é uma abordagem de Machine Learning baseada em redes neurais profundas.
 
@@ -1166,7 +1603,7 @@ A ideia é que a própria rede consiga aprender representações e padrões a pa
 
 ---
 
-## 4. Rede Neural
+#### Rede Neural
 
 Uma rede neural possui várias camadas de unidades matemáticas conectadas.
 
@@ -1186,7 +1623,7 @@ Saída
 
 ---
 
-## 5. LLM — Large Language Model
+#### LLM: Large Language Model
 
 LLM é um modelo de linguagem treinado em grandes volumes de texto para aprender padrões da linguagem e gerar texto a partir do contexto recebido.
 
@@ -1198,7 +1635,7 @@ O modelo não funciona simplesmente como um banco de dados que procura uma respo
 
 ---
 
-## 6. Tokens
+#### Tokens
 
 Tokens são unidades utilizadas pelo modelo para representar o texto.
 
@@ -1228,13 +1665,13 @@ Tokens são importantes porque afetam:
 
 ---
 
-## 7. Treinamento x Inferência
+#### Treinamento x Inferência
 
-### Treinamento
+##### Treinamento
 
 É o processo em que o modelo aprende e ajusta seus parâmetros a partir dos dados.
 
-### Inferência
+##### Inferência
 
 É quando utilizamos o modelo já treinado para produzir uma resposta a partir de uma entrada.
 
@@ -1244,7 +1681,7 @@ Forma simples:
 
 ---
 
-## 8. Parâmetros
+#### Parâmetros
 
 Parâmetros são valores internos ajustados durante o treinamento para que o modelo consiga representar padrões aprendidos.
 
@@ -1266,7 +1703,7 @@ Inferência
 
 ---
 
-## 9. Transformer
+#### Transformer
 
 Transformers são uma arquitetura de redes neurais muito utilizada nos modelos modernos de linguagem.
 
@@ -1276,7 +1713,7 @@ O Transformer introduziu o mecanismo de **attention**, permitindo que o modelo a
 
 ---
 
-## 10. Attention
+#### Attention
 
 Attention permite que o modelo dê diferentes pesos às partes da entrada de acordo com sua relevância para produzir a saída.
 
@@ -1286,9 +1723,9 @@ Uma explicação simples:
 
 ---
 
-# EMBEDDINGS E BANCO VETORIAL
+### EMBEDDINGS E BANCO VETORIAL
 
-## 11. Embedding
+#### Embedding
 
 Embedding é uma representação numérica de uma informação.
 
@@ -1306,7 +1743,7 @@ Textos semanticamente parecidos tendem a possuir vetores próximos em um espaço
 
 ---
 
-## 12. Banco Vetorial
+#### Banco Vetorial
 
 Um banco vetorial é especializado em armazenar embeddings e realizar buscas por similaridade de forma muito eficiente.
 
@@ -1340,9 +1777,9 @@ Vetores/documentos mais próximos
 
 ---
 
-# RAG
+### RAG
 
-## 13. RAG — Retrieval-Augmented Generation
+#### RAG: Retrieval-Augmented Generation
 
 RAG combina busca de informação com geração de resposta.
 
@@ -1389,9 +1826,9 @@ Uma boa resposta de entrevista:
 
 ---
 
-# AGENTES
+### AGENTES
 
-## 14. Agente
+#### Agente
 
 Um agente utiliza um modelo para interpretar uma tarefa, tomar decisões e utilizar ferramentas para executar ações.
 
@@ -1427,7 +1864,7 @@ Enviar e-mail
 
 ---
 
-## 15. Tools
+#### Tools
 
 Tools são capacidades que o agente pode utilizar para executar ações ou consultar informações.
 
@@ -1448,7 +1885,7 @@ Isso é importante para segurança.
 
 ---
 
-## 16. Skills
+#### Skills
 
 O conceito de Skill pode variar de acordo com a plataforma ou framework.
 
@@ -1469,9 +1906,9 @@ Não tratar "Skill" como um padrão universal. O significado depende da tecnolog
 
 ---
 
-# MEMÓRIA
+### MEMÓRIA
 
-## 17. Memória de Agentes
+#### Memória de Agentes
 
 Um sistema de IA pode armazenar informações relevantes de uma interação para recuperá-las posteriormente.
 
@@ -1499,9 +1936,9 @@ A memória pode ser implementada utilizando diferentes estratégias e bancos, de
 
 ---
 
-# ORQUESTRAÇÃO E MULTIAGENTES
+### ORQUESTRAÇÃO E MULTIAGENTES
 
-## 18. Orquestrador
+#### Orquestrador
 
 Um orquestrador coordena diferentes agentes ou etapas de uma tarefa.
 
@@ -1522,7 +1959,7 @@ Uma tarefa complexa pode ser dividida em partes menores e distribuída entre age
 
 ---
 
-## 19. Multiagentes
+#### Multiagentes
 
 Arquitetura multiagente utiliza vários agentes especializados trabalhando em conjunto.
 
@@ -1540,7 +1977,7 @@ Cada agente pode possuir ferramentas, responsabilidades e contexto diferentes.
 
 ---
 
-## 20. Agente Autônomo
+#### Agente Autônomo
 
 Um agente autônomo consegue executar uma tarefa com pouca intervenção humana.
 
@@ -1561,9 +1998,9 @@ Ele pode:
 
 ---
 
-# FINE-TUNING E RLHF
+### FINE-TUNING E RLHF
 
-## 21. Fine-Tuning
+#### Fine-Tuning
 
 Fine-tuning é utilizar um modelo previamente treinado e realizar um treinamento adicional para especializá-lo em determinado comportamento, tarefa ou domínio.
 
@@ -1581,7 +2018,7 @@ Não significa necessariamente criar um modelo do zero.
 
 ---
 
-## 22. RLHF
+#### RLHF
 
 RLHF significa:
 
@@ -1605,9 +2042,9 @@ Modelo
 
 ---
 
-# GERAÇÃO DE TEXTO
+### GERAÇÃO DE TEXTO
 
-## 23. Temperature
+#### Temperature
 
 Temperature influencia a aleatoriedade da geração.
 
@@ -1622,7 +2059,7 @@ Não significa literalmente "seguir regras" ou "ser criativo", mas é uma boa fo
 
 ---
 
-## 24. Top-K
+#### Top-K
 
 Top-K limita a geração aos K tokens mais prováveis.
 
@@ -1636,7 +2073,7 @@ O modelo considera os 5 candidatos mais prováveis naquele momento.
 
 ---
 
-## 25. Top-P
+#### Top-P
 
 Top-P utiliza uma probabilidade acumulada para determinar quais tokens podem participar da geração.
 
@@ -1646,9 +2083,9 @@ De forma simples:
 
 ---
 
-# PROMPT ENGINEERING
+### PROMPT ENGINEERING
 
-## 26. Engenharia de Prompt
+#### Engenharia de Prompt
 
 Prompt Engineering é a prática de estruturar instruções, contexto, exemplos e restrições para orientar o comportamento do modelo.
 
@@ -1677,11 +2114,11 @@ Hoje, uma aplicação de IA bem projetada depende muito mais da arquitetura ao r
 
 ---
 
-# IA GENERATIVA
+### IA GENERATIVA
 
-## 27. IA Descritiva x IA Generativa
+#### IA Descritiva x IA Generativa
 
-### IA Descritiva
+##### IA Descritiva
 
 Analisa dados existentes e descreve o que aconteceu.
 
@@ -1689,7 +2126,7 @@ Exemplo:
 
 > "As vendas caíram 15% no último mês."
 
-### IA Generativa
+##### IA Generativa
 
 Gera conteúdo novo a partir dos dados e instruções recebidas.
 
@@ -1699,13 +2136,13 @@ Exemplo:
 
 ---
 
-# TREINAMENTO DE MODELOS
+### TREINAMENTO DE MODELOS
 
-## 28. Criar um modelo x utilizar um modelo
+#### Criar um modelo x utilizar um modelo
 
 Existem níveis diferentes de trabalho com IA.
 
-### Utilizar um modelo
+##### Utilizar um modelo
 
 ```text
 Aplicação
@@ -1715,7 +2152,7 @@ API
 LLM
 ```
 
-### RAG
+##### RAG
 
 ```text
 Aplicação
@@ -1727,7 +2164,7 @@ Contexto
 LLM
 ```
 
-### Fine-tuning
+##### Fine-tuning
 
 ```text
 Modelo existente
@@ -1737,7 +2174,7 @@ Treinamento adicional
 Modelo especializado
 ```
 
-### Treinar um modelo
+##### Treinar um modelo
 
 É um processo muito mais complexo, envolvendo dados, arquitetura, treinamento, infraestrutura, parâmetros e grande capacidade computacional.
 
@@ -1745,9 +2182,9 @@ Para uma vaga de backend, normalmente é muito mais importante saber **integrar 
 
 ---
 
-# IA EM SISTEMAS REAIS
+### IA EM SISTEMAS REAIS
 
-## 29. Como eu penso em IA dentro de uma aplicação
+#### Como eu penso em IA dentro de uma aplicação
 
 Eu não vejo IA apenas como colocar um ChatGPT dentro do sistema.
 
@@ -1796,9 +2233,9 @@ E junto disso preciso pensar em:
 
 ---
 
-# SEGURANÇA EM IA
+### SEGURANÇA EM IA
 
-## 30. Prompt Injection
+#### Prompt Injection
 
 Prompt Injection acontece quando uma entrada tenta manipular as instruções do modelo.
 
@@ -1810,7 +2247,7 @@ As permissões precisam estar na aplicação.
 
 ---
 
-## 31. Controle de acesso
+#### Controle de acesso
 
 Um agente não deve conseguir executar qualquer ferramenta apenas porque o modelo pediu.
 
@@ -1832,7 +2269,7 @@ A decisão de segurança deve estar no backend.
 
 ---
 
-## 32. Dados sensíveis
+#### Dados sensíveis
 
 Ao trabalhar com IA é importante avaliar:
 
@@ -1855,7 +2292,7 @@ Ao trabalhar com IA é importante avaliar:
 
 ---
 
-# RESPOSTA PARA ENTREVISTA
+### RESPOSTA PARA ENTREVISTA
 
 Se perguntarem:
 
@@ -1871,7 +2308,7 @@ Uma resposta natural seria:
 
 ---
 
-# RESUMO PARA DECORAR
+### RESUMO PARA DECORAR
 
 ```text
 IA
@@ -1914,7 +2351,7 @@ IA
 └── IA Generativa
 ```
 
-## REGRA PRINCIPAL PARA A ENTREVISTA
+#### REGRA PRINCIPAL PARA A ENTREVISTA
 
 Não tente demonstrar que sabe tudo de IA.
 
@@ -1931,3 +2368,122 @@ E principalmente:
 > "Minha experiência está mais na aplicação e integração de IA em sistemas do que na pesquisa ou treinamento de modelos."
 
 Isso é totalmente coerente com uma posição de **referência técnica/backend**.
+
+---
+
+## Parte 11. Histórias técnicas e documentação
+
+### Histórias reais para usar
+
+- Conflito Front x Back
+- Dev júnior / alteração problemática
+- Mentoria
+- Code review
+- Incidente
+- Arquitetura na FITEC
+- Projeto de logística como freelancer
+
+Não focar em culpa. Focar em decisão, comunicação e resultado.
+
+### Documentação
+
+Evidência real: documentação de API com OpenAPI/Swagger (projeto Node + MongoDB). Complementar com README de setup, diagramas de arquitetura e registro de decisões (ADR).
+
+---
+
+## Parte 12. Perguntas para fazer ao gestor
+
+1. Qual é o projeto e em que fase ele está?
+
+2. Como é o time hoje e onde essa posição se encaixa?
+
+3. Qual é hoje o maior desafio técnico que vocês enfrentam?
+
+4. Como funciona o processo de desenvolvimento? Vocês trabalham com code review, testes automatizados e CI/CD?
+
+5. O que seria considerado um bom resultado para essa posição nos primeiros três meses?
+
+6. Existe espaço para o desenvolvedor participar das decisões de arquitetura?
+
+---
+
+## Parte 13. Checklist antes da entrevista
+
+### Banco
+
+- [ ] SQL nativo
+- [ ] Índices
+- [ ] Transações
+- [ ] N+1
+- [ ] MongoDB
+
+### Arquitetura
+
+- [ ] Clean Architecture
+- [ ] SOLID
+- [ ] DDD básico
+- [ ] Repository
+- [ ] Use Case
+- [ ] Dependency Injection
+
+### Testes
+
+- [ ] Pirâmide
+- [ ] Unitários
+- [ ] Integração
+- [ ] E2E
+- [ ] Mock
+- [ ] TDD
+
+### DevOps
+
+- [ ] Docker
+- [ ] Git
+- [ ] GitFlow
+- [ ] Code Review
+- [ ] CI/CD
+- [ ] AWS
+
+### Resiliência
+
+- [ ] Timeout
+- [ ] Retry
+- [ ] Backoff
+- [ ] Jitter
+- [ ] Circuit Breaker
+- [ ] Idempotência
+- [ ] DLQ
+
+### Observabilidade
+
+- [ ] Logs
+- [ ] Métricas
+- [ ] Traces
+- [ ] Alertas
+- [ ] Health Check
+
+### Mapa de revisão
+
+**Banco**  
+→ ORM × SQL nativo, índices, transações, N+1, SQL Injection
+
+**Clean Architecture**  
+→ Entity → Use Case → Interface → Adapter
+
+**Testes**  
+→ unitário → integração → E2E → mocks → TDD
+
+**Resiliência**  
+→ timeout → retry → backoff → jitter → circuit breaker → idempotência
+
+**Mensageria**  
+→ producer → consumer → fila → retry → DLQ
+
+**Docker / CI/CD**  
+→ build → testes → imagem → deploy → rollback
+
+**Observabilidade**  
+→ logs → métricas → traces → health check → latência → erros
+
+**Git**  
+→ PR → code review → GitFlow → trunk-based

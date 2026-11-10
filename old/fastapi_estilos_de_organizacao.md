@@ -130,7 +130,7 @@ só um padrão de porta/adapter pontual pra integrações externas.
 
 ```
 crm_back/
-├── main.py                          # entrypoint, FastAPI(), CORS, Sentry, inclui routers
+├── main.py                          # entrypoint, FastAPI(), CORS, Sentry,routers
 └── rental/
     ├── config.py                        # <- config do servidor (na raiz do pacote)
     ├── dependencies/db.py                   # engine/session, get_db()
