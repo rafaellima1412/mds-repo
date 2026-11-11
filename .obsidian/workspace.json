@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "29830433525fe7f0",
+        "id": "b476d846aaea12a1",
         "type": "tabs",
         "children": [
           {
-            "id": "87bb24b47d475eaa",
+            "id": "92041dacdf20444c",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "certi/Getting Started Guide for Agents.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nova aba"
+              "title": "Getting Started Guide for Agents"
             }
           }
         ]
@@ -177,7 +181,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 697.5
+    "width": 333.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -191,15 +195,20 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "87bb24b47d475eaa",
+  "active": "92041dacdf20444c",
   "lastOpenFiles": [
+    "igreja/Sou filho ou sou Servo.md",
+    "certi/Getting Started Guide for Agents.md",
+    "igreja",
+    "certi/Elasticsearch.md",
+    "certi/ExternalTaskCache.md",
+    "entrevistas/roteiro_entrevista_fullstack_rafael_FINAL.md",
+    "Rust.md",
+    "certi",
     "Apresentação.md",
-    "Elasticsearch.md",
-    "ExternalTaskCache.md",
     "indice.base",
-    "O que é o Floci.md",
-    "roteiro_entrevista_fullstack_rafael_FINAL.md",
-    "Jenkins Pipeline.md",
+    "certi/O que é o Floci.md",
+    "certi/Jenkins Pipeline.md",
     "entrevistas/System Design.md",
     "projetos rasp/Projeto_WallE_Cluster_AI.md",
     "propulsor/ftt_operacional_tr069.md",
@@ -217,9 +226,6 @@
     "artigos/artigo_linkedin_go_vet_e_linters.md",
     "artigos/analise-autenticacao-autorizacao.md",
     "artigos/RPC — Remote Procedure Call.md",
-    "artigos/Rust é seguro, mas não é à prova de ciclo.md",
-    "file:C:/Users/CNT/AppData/Local/Temp/a4b5d6f2-b776-45ff-bb78-2dd182a82144_Minetest-WorldEdit-master.zip.144/Minetest-WorldEdit-master/README.md",
-    "old/Guia de Entrevista, Gestor da Área.md",
     "old/Plano de Estudos Sugerido – Desenvolvedor(a) de Software Sênior Golang _ React.pdf",
     "outros/Plano de Estudos Sugerido – Desenvolvedor(a) de Software Sênior Golang _ React.pdf",
     "imagens/camadas_resiliencia_payment.png",
@@ -234,8 +240,6 @@
     "imagens/Pasted image 20260811140801.png",
     "imagens/Pasted image 20260811140206.png",
     "entrevistas",
-    "projetos rasp",
-    "propulsor",
     "Sem título.canvas",
     "capa.png",
     "lifes.png",
